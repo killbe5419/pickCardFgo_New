@@ -97,7 +97,7 @@
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".title {\n    color: white;\n}\n\nbody {\n    padding: 50px;\n    font: 14px \"Lucida Grande\", Helvetica, Arial, sans-serif;\n    background-color: black;\n}\n\nh1 {\n    color: azure;\n    font-size: 40px;\n    font-weight: 900;\n}\n\n#react-dom button {\n    display: inline-block;\n    padding: .3em .8em;\n    border: 1px solid #446d88;\n    background: #58a linear-gradient(#77a0bb,#58a);\n    border-radius: .2em;\n    box-shadow: 0 .05em .25em gray;\n    color: white;\n    text-shadow: 0 -.05em .05em #335166;\n    font-size: 125%;\n    line-height: 1.5;\n    margin-right: .5em;\n}\n\n#showStone {\n    display: inline-block;\n}\n\n#showStone * {\n    display: inline-block;\n}\n\n#showStone p {\n    font-size: 15px;\n    font-weight: 900;\n    color: azure;\n}\n\n.case {\n    display: inline-block;\n    margin: 10px;\n}\n\n.case p {\n    font-size: 15px;\n    font-weight: 900;\n}", ""]);
+exports.push([module.i, ".title {\n    color: white;\n}\n\nbody {\n    padding: 50px;\n    font: 14px \"Lucida Grande\", Helvetica, Arial, sans-serif;\n    background-color: black;\n}\n\nh1 {\n    color: azure;\n    font-size: 40px;\n    font-weight: 900;\n}\n\n#react-dom button {\n    display: inline-block;\n    padding: .3em .8em;\n    border: 1px solid #446d88;\n    background: #58a linear-gradient(#77a0bb,#58a);\n    border-radius: .2em;\n    box-shadow: 0 .05em .25em gray;\n    color: white;\n    text-shadow: 0 -.05em .05em #335166;\n    font-size: 125%;\n    line-height: 1.5;\n    margin-right: .5em;\n}\n\n#showStone {\n    display: inline-block;\n}\n\n#showStone * {\n    display: inline-block;\n}\n\n#showStone p {\n    font-size: 15px;\n    font-weight: 900;\n    color: azure;\n}\n\n.case {\n    display: inline-block;\n    margin: 10px;\n}\n\n.case p {\n    font-size: 15px;\n    font-weight: 900;\n}\n\n.calcResult {\n    font-size: 15px;\n    font-weight: 900;\n    color: azure;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -616,6 +616,12 @@ class Case extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       }));
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, list);
     }
+
+    if (this.props.method === "calculate") {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "calcResult"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, " Nobel: ", this.props.input.nobel), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Numbers of picks: ", this.props.input.data.pickNum), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Money: ", this.props.input.data.moneyType, " ", this.props.input.data.money), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Percentage: ", (this.props.input.data.p * 100).toFixed(3), "% "));
+    }
   }
 
 }
@@ -694,7 +700,6 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
             };
             axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/charge", data).then(res => {
               if (res.data.correct) {
-                console.log(res.data);
                 let tmp = this.state.stone;
                 tmp += 167;
                 this.setState({
@@ -736,7 +741,6 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
         const rare = Object(_checkRare_js__WEBPACK_IMPORTED_MODULE_4__["default"])(res.data.rare);
         this.setState({
           input: {
-            alt: "waiting for image",
             method: "pickOne",
             style: rare,
             data: res.data
@@ -793,6 +797,35 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       });
     });
 
+    _defineProperty(this, "handleCalc", () => {
+      const input = prompt("Nobel:?");
+      const reg = /^([0]|[1-9][0-9]*)$/;
+
+      if (!reg.test(input)) {
+        alert("illegal input");
+        return;
+      }
+
+      const nobel = Number(input);
+      const data = {
+        params: {
+          method: "calculate",
+          nobel: nobel,
+          fromClient: true
+        }
+      };
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/calculate", data).then(res => {
+        console.log(res.data);
+        this.setState({
+          input: {
+            method: "calculate",
+            nobel: nobel,
+            data: res.data
+          }
+        });
+      }).catch(err => console.error(err));
+    });
+
     this.state = {
       stone: 167,
       stoneUse: false,
@@ -819,7 +852,9 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       onClick: this.handlePickOne
     }, "Pick 1 card"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       onClick: this.handlePickTen
-    }, "Pick 10 cards"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", null, "Calculate"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    }, "Pick 10 cards"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      onClick: this.handleCalc
+    }, "Calculate"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       id: "showStone"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       src: this.state.stoneUrl,

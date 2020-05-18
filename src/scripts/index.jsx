@@ -34,6 +34,16 @@ class Case extends React.Component {
                 </div>
             );
         }
+        if(this.props.method === "calculate") {
+            return (
+                <div className="calcResult">
+                    <p> Nobel: { this.props.input.nobel }</p>
+                    <p>Numbers of picks: { this.props.input.data.pickNum }</p>
+                    <p>Money: { this.props.input.data.moneyType } { this.props.input.data.money }</p>
+                    <p>Percentage: { (this.props.input.data.p * 100).toFixed(3) }% </p>
+                </div>
+            );
+        }
 
     }
 }
@@ -130,7 +140,6 @@ class App extends React.Component {
                     axios.get("/charge",data)
                         .then(res => {
                             if(res.data.correct) {
-                                console.log(res.data);
                                 let tmp = this.state.stone;
                                 tmp += 167;
                                 this.setState({
@@ -173,7 +182,6 @@ class App extends React.Component {
                 const rare = checkRare(res.data.rare);
                 this.setState({
                    input:{
-                       alt: "waiting for image",
                        method:"pickOne",
                        style: rare,
                        data: res.data
@@ -230,13 +238,43 @@ class App extends React.Component {
             })
     }
 
+    handleCalc = () => {
+        const input = prompt("Nobel:?");
+        const reg = /^([0]|[1-9][0-9]*)$/;
+
+        if(!(reg.test(input))) {
+            alert("illegal input");
+            return;
+        }
+        const nobel = Number(input);
+        const data = {
+            params:{
+                method:"calculate",
+                nobel: nobel,
+                fromClient: true
+            }
+        };
+        axios.get("/calculate",data)
+            .then(res => {
+                console.log(res.data);
+                this.setState({
+                    input: {
+                        method: "calculate",
+                        nobel: nobel,
+                        data: res.data
+                    }
+                })
+            })
+            .catch(err => console.error(err))
+    }
+
     render() {
         return (
             <div>
                 <h1 className="title">FGO pick-card simulation</h1>
                 <button onClick={ this.handlePickOne }>Pick 1 card</button>
                 <button onClick={ this.handlePickTen }>Pick 10 cards</button>
-                <button>Calculate</button>
+                <button onClick={ this.handleCalc }>Calculate</button>
                 <div id="showStone">
                     <img src={ this.state.stoneUrl } alt={ this.state.stoneAlt } onClick={ this.handleUseStone }/>
                     <p> { this.state.stone } </p>

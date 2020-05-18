@@ -1,32 +1,11 @@
-const MongoClient = require("mongodb");
-const mongoUrl = "mongodb://localhost:27017";
-
-function guaranteeCard () {
-    let out = [];
-    MongoClient.connect(mongoUrl, { useNewUrlParser: true }, (err,db) => {
-        if(err) throw err;
-        const targetDB = db.db("fgo");
-        const where3Servant = {
-            rare: 3,
-            type: "servant",
-            inRange: true
-        };
-        const where4Card = {
-            rare: 4,
-            inRange: true,
-        };
-        targetDB.collection("card").find(where3Servant).toArray((err,res) => {
-            if(err) throw err;
-            const tmp = Math.floor(Math.random() * res.length);
-            out.push(res[tmp]);
-        });
-        targetDB.collection("card").find(where4Card).toArray((err,res) => {
-            if(err) throw err;
-            const tmp = Math.floor(Math.random() * res.length);
-            out.push(res[tmp]);
-        });
-        return out;
+function a () {
+    return new Promise(resolve => {
+        const a = [{a:1},{b:2},{c:3},{d:4},{e:5}];
+        resolve(a);
     })
 }
 
-console.log(guaranteeCard());
+const tmp = a();
+Promise.all((tmp).then(value => {
+    console.log(value);
+}))

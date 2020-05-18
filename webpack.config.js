@@ -47,6 +47,6 @@ module.exports = {
         "react": "React",
         "react-dom": "ReactDOM",
         "lodash": "_",
-        "axios": "axios"
+        "axios": "axios",
     }
 };

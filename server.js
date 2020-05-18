@@ -22,58 +22,64 @@ app.get("/charge",(req,res) => {
 })
 
 app.get("/pickOne",(req,res) => {
-    MongoClient.connect(mongoUrl, { useNewUrlParser: true } ,(err,db) => {
-        if(err) throw err;
-        let out;
-        const targetDB = db.db("fgo");
-        const item = percentage();
-        targetDB.collection("card").find(item).toArray((err,results) => {
-            if(err) throw err;
-            const tmp = Math.floor(Math.random() * results.length);
-            out = results[tmp];
-        })
-        db.close().then(()=> {
-            console.log("connection ended!");
-            res.send(out);
-        }).catch();
-    })
+    const doAll = async () => {
+        const pick = await pickOne();
+        await res.send(pick);
+    }
+    doAll().catch(err => console.log(err));
 })
 
 app.get("/pickTen",(req,res) => {
-    MongoClient.connect(mongoUrl,(err,db) => {
-        if(err) throw err;
-        const targetDB = db.db("fgo");
-        let out = [];
-        const guarantee = guaranteeCard();
-        targetDB.collection("card").find(guarantee.guarantee3servant).toArray((err,results) => {
-            if(err) throw err;
-            const tmp = Math.floor(Math.random() * results.length);
-            out.push(results[tmp]);
-        })
-        targetDB.collection("card").find(guarantee.guaranteePick).toArray((err,results) => {
-            if(err) throw err;
-            const tmp = Math.floor(Math.random() * results.length);
-            out.push(results[tmp]);
-            console.log(results[tmp].name,results[tmp].rare,results[tmp].type);
-        })
-        for(let i=0;i<8;i++) {
-            const item = percentage();
-            targetDB.collection("card").find(item).toArray((err,results) => {
-                if(err) throw err;
-                const tmp = Math.floor(Math.random() * results.length);
-                out.push(results[tmp]);
-            })
+    const doAll = async () => {
+        let pick = [];
+        pick.push(await pickGuarantee3servant());
+        pick.push(await pickGuarantee4());
+        for(let i=2;i<10;i++) {
+            pick.push(await pickOne());
         }
-        db.close().then( () => {
-            console.log("connection ended!");
-            for (let i = 0; i < out.length; i++) {
-                out[i].No = i;
-            }
-            console.log(out.length);
-            res.send(out);
-        })
-    })
+        for(let i=0;i<pick.length;i++) {
+            pick[i].No = i;
+        }
+        await res.send(pick);
+    }
+    doAll().catch(err => console.log(err));
 })
+
+app.get("/calculate",(req,res) => {
+    const doAll = async () => {
+        const nobel = req.query.nobel;
+        let nobelNow = 0, pickNum = 0, stone = 0;
+        let pick = [];
+        while (nobelNow < nobel) {
+            pick.push(await pickGuarantee3servant());
+            pick.push(await pickGuarantee4());
+            for(let i=2;i<10;i++) {
+                pick.push(await pickOne());
+            }
+            for(let i=0;i<pick.length;i++) {
+                if(pick[i].type === "servant" && pick[i].rare > 3) {
+                    console.log(pick[i].name);
+                }
+                if(pick[i].name === "ジャンヌ・オルタ" && pick[i].isPickedUp === true) nobelNow += 1;
+            }
+            pickNum += 1;
+            stone += 30;
+            pick = [];
+        }
+        const money = Math.ceil(stone / 167) * 9800;
+        const p = nobelNow / (pickNum * 10);
+        await console.log(nobelNow,pickNum,stone,money);
+        await res.send({
+            nobel: nobelNow,
+            pickNum: pickNum,
+            stone:stone,
+            money: money,
+            moneyType: "JPY(￥)",
+            p: p,
+        })
+    };
+    doAll();
+});
 
 app.listen(2333,() => {
     console.log("Listening on port 2333!\n");
@@ -136,16 +142,63 @@ function percentage() {
     return item;
 }
 
-function guaranteeCard () {
-    return {
-        guarantee3servant: {
-            rare: 3,
-            type: "servant",
-            inRange: true
-        },
-        guaranteePick: {
-            rare: 4,
-            inRange: true
-        }
-    }
+function pickOne () {
+    return new Promise(resolve => {
+        MongoClient.connect(mongoUrl, { useNewUrlParser: true } ,(err,db) => {
+            if(err) throw err;
+            const targetDB = db.db("fgo");
+            const item = percentage();
+            targetDB.collection("card").find(item).toArray((err,result) => {
+                if(err) throw err;
+                const tmp = Math.floor(Math.random() * result.length);
+                resolve(result[tmp]);
+            })
+            db.close().then(()=> {
+                console.log("connection ended!");
+            }).catch();
+        })
+    })
+}
+
+function pickGuarantee3servant () {
+    return new Promise(resolve => {
+        MongoClient.connect(mongoUrl, { useNewUrlParser: true } ,(err,db) => {
+            if(err) throw err;
+            const targetDB = db.db("fgo");
+            const item = {
+                type: "servant",
+                rare: 3,
+                inRange: true
+            }
+            targetDB.collection("card").find(item).toArray((err,result) => {
+                if(err) throw err;
+                const tmp = Math.floor(Math.random() * result.length);
+                resolve(result[tmp]);
+            })
+            db.close().then(()=> {
+                console.log("connection ended!");
+            }).catch();
+        })
+    })
+}
+
+function pickGuarantee4 () {
+    return new Promise(resolve => {
+        MongoClient.connect(mongoUrl, { useNewUrlParser: true } ,(err,db) => {
+            if(err) throw err;
+            const targetDB = db.db("fgo");
+            const item = {
+                rare: 4,
+                inRange: true
+            };
+            targetDB.collection("card").find(item).toArray((err,result) => {
+                if(err) throw err;
+                const tmp = Math.floor(Math.random() * result.length);
+                resolve(result[tmp]);
+            })
+            db.close().then(()=> {
+                console.log("connection ended!");
+            }).catch();
+        })
+    })
 }
