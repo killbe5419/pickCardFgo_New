@@ -38,7 +38,19 @@ app.get("/pickTen",(req,res) => {
         if(err) throw err;
         const targetDB = db.db("fgo");
         let out = [];
-        for(let i=0;i<10;i++) {
+        const guarantee = guaranteeCard();
+        targetDB.collection("card").find(guarantee.guarantee3servant).toArray((err,results) => {
+            if(err) throw err;
+            const tmp = Math.floor(Math.random() * results.length);
+            out.push(results[tmp]);
+        })
+        targetDB.collection("card").find(guarantee.guaranteePick).toArray((err,results) => {
+            if(err) throw err;
+            const tmp = Math.floor(Math.random() * results.length);
+            out.push(results[tmp]);
+        })
+
+        for(let i=0;i<8;i++) {
             const item = percentage();
             targetDB.collection("card").find(item).toArray((err,results) => {
                 if(err) throw err;
@@ -115,4 +127,18 @@ function percentage() {
         }
     }
     return item;
+}
+
+function guaranteeCard () {
+    return {
+        guaranteePick: {
+            rare: 4,
+            inRange: true
+        },
+        guarantee3servant: {
+            rare: 3,
+            inRange: true,
+            type: "servant"
+        }
+    }
 }
