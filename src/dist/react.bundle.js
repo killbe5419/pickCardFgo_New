@@ -2596,24 +2596,6 @@ class Case extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
     }
 
     if (this.props.method === "pickTen") {
-      /*
-      const tmp = [];
-      for(let i=0;i<5;i++) {
-          const item = this.props.input.data[i];
-          tmp.push(<div className="case" key={item.No.toString()} style={checkRare(item.rare)}>
-              <p>{ checkLength(item.name) }</p>
-              <img src={ item.img } alt={ item.name } />
-          </div>)
-      }
-      tmp.push(<br key="br"/>);
-      for(let i=5;i<10;i++) {
-          const item = this.props.input.data[i];
-          tmp.push(<div className="case" key={item.No.toString()} style={checkRare(item.rare)}>
-              <p>{ checkLength(item.name) }</p>
-              <img src={ item.img } alt={ item.name } />
-          </div>)
-      }
-       */
       const list = this.props.input.data.map(item => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "case",
         key: item.No.toString(),
