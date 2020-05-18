@@ -768,7 +768,12 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
         }
       };
       axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("/pickTen", data).then(res => {
-        console.log(res.data);
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i].type === "servant" && res.data[i].rare === 5) {
+            alert("Congratulations! You got a SSR servant => " + res.data[i].name);
+          }
+        }
+
         this.setState({
           input: {
             method: "pickTen",
