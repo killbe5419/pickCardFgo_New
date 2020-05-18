@@ -14,8 +14,7 @@ app.get("/",(req,res) => {
 })
 
 app.get("/pickOne",(req,res) => {
-    console.log(req.query);
-    MongoClient.connect(mongoUrl,(err,db) => {
+    MongoClient.connect(mongoUrl, { useNewUrlParser: true } ,(err,db) => {
         if(err) throw err;
         let out;
         const targetDB = db.db("fgo");
@@ -33,7 +32,6 @@ app.get("/pickOne",(req,res) => {
 })
 
 app.get("/pickTen",(req,res) => {
-    console.log(req.query);
     MongoClient.connect(mongoUrl,(err,db) => {
         if(err) throw err;
         const targetDB = db.db("fgo");
@@ -48,8 +46,8 @@ app.get("/pickTen",(req,res) => {
             if(err) throw err;
             const tmp = Math.floor(Math.random() * results.length);
             out.push(results[tmp]);
+            console.log(results[tmp].name,results[tmp].rare,results[tmp].type);
         })
-
         for(let i=0;i<8;i++) {
             const item = percentage();
             targetDB.collection("card").find(item).toArray((err,results) => {
@@ -58,13 +56,14 @@ app.get("/pickTen",(req,res) => {
                 out.push(results[tmp]);
             })
         }
-        db.close().then(()=> {
+        db.close().then( () => {
             console.log("connection ended!");
-            for(let i=0;i<out.length;i++) {
+            for (let i = 0; i < out.length; i++) {
                 out[i].No = i;
             }
+            console.log(out.length);
             res.send(out);
-        }).catch();
+        })
     })
 })
 
@@ -131,14 +130,14 @@ function percentage() {
 
 function guaranteeCard () {
     return {
+        guarantee3servant: {
+            rare: 3,
+            type: "servant",
+            inRange: true
+        },
         guaranteePick: {
             rare: 4,
             inRange: true
-        },
-        guarantee3servant: {
-            rare: 3,
-            inRange: true,
-            type: "servant"
         }
     }
 }

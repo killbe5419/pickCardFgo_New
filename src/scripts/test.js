@@ -1,36 +1,32 @@
-const arr = [
-    {
-        No: 1,
-        odd: true,
-        even:false
-    },
-    {
-        No: 2,
-        even: true,
-        odd:false
-    },
-    {
-        No: 3,
-        odd: true,
-        even:false
-    },
-    {
-        No: 4,
-        even: true,
-        odd:false
-    },
-    {
-        No: 5,
-        odd: true,
-        even:false
-    }
-]
+const MongoClient = require("mongodb");
+const mongoUrl = "mongodb://localhost:27017";
 
-const arr_ = arr.map( x => {
-    if(x.even) x.No = x.No + 1;
-    if(x.odd) x.No = x.No + 2;
-    x.No = x.No * 2;
-})
+function guaranteeCard () {
+    let out = [];
+    MongoClient.connect(mongoUrl, { useNewUrlParser: true }, (err,db) => {
+        if(err) throw err;
+        const targetDB = db.db("fgo");
+        const where3Servant = {
+            rare: 3,
+            type: "servant",
+            inRange: true
+        };
+        const where4Card = {
+            rare: 4,
+            inRange: true,
+        };
+        targetDB.collection("card").find(where3Servant).toArray((err,res) => {
+            if(err) throw err;
+            const tmp = Math.floor(Math.random() * res.length);
+            out.push(res[tmp]);
+        });
+        targetDB.collection("card").find(where4Card).toArray((err,res) => {
+            if(err) throw err;
+            const tmp = Math.floor(Math.random() * res.length);
+            out.push(res[tmp]);
+        });
+        return out;
+    })
+}
 
-console.log(arr_);
-
+console.log(guaranteeCard());
