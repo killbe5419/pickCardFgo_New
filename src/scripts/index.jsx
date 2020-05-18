@@ -2,55 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
 import "../stylesheets/styles.css";
+import checkRare from "./checkRare.js";
+import checkLength from "./checkLength.js";
 
-function checkRare(num) {
-    let output;
-    if(num === 5) {
-        output = { color: "orange" };
-    }
-    else if(num === 4) {
-        output = { color: "purple" };
-    } else {
-        output = { color: "blue" };
-    }
-    return output;
-}
 
-function checkLength(str){
-    const change = (str,key,limit) => {
-        let out = [];
-        out.push(str);
-        const a = str.split(key);
-        for(let i=0;i<a.length -1; i++) {
-            let arr = out[i].toString().split(key);
-            arr.pop();
-            out.push(arr.join(key));
-        }
-        let select;
-        for(let i=0;i<out.length;i++) {
-            const tmp = out[i];
-            if(tmp.length < limit) {
-                select = tmp;
-                break;
-            }
-        }
-        return select;
-    }
-    let out;
-    if(str.indexOf("・") > -1 && str.indexOf("〔") > -1) {
-        const tmp = change(str,"〔",10);
-        out = change(tmp, "・", 10);
-    }
-    else if(str.indexOf("・") > -1 && str.indexOf("〔") === -1) {
-        out = change(str,"・",10);
-    }
-    else if (str.indexOf("・") === -1 && str.indexOf("〔") > -1) {
-        out = change(str,"〔",10);
-    } else {
-        out = str.split(str[10])[0];
-    }
-    return out;
-}
+
 
 class Case extends React.Component {
     render() {
@@ -89,6 +45,7 @@ class App extends React.Component {
         super(props);
         this.state = {
             stone: 167,
+            stoneUse: false,
             stoneUrl: "../images/holystoneNo.jpg",
             stoneAlt: "a stone icon",
             input: {
@@ -104,18 +61,106 @@ class App extends React.Component {
     }
 
     handleUseStone = () => {
-        if(this.state.stoneUrl === "../images/holystoneNo.jpg") {
+        if(!this.state.stoneUse) {
             this.setState({
+                stoneUse: true,
                 stoneUrl: "../images/holystone.jpg"
             })
         } else {
             this.setState({
+                stoneUse: false,
                 stoneUrl: "../images/holystoneNo.jpg"
             })
         }
     }
 
+    checkStone = (num,method) => {
+        if(method === "pickOne") {
+            if(num - 3 < 0) {
+                const answer = window.confirm("You don't have enough holystone for picking, " +
+                    "Do you want to spend ￥9800 charging 167 holystones?");
+                if(answer) {
+                    alert("processing...");
+                    const data = {
+                        params: {
+                            method: "charge",
+                            fromClient: true,
+                            money: 9800,
+                            moneyType: "JPY",
+                            holystone: 167,
+                        }
+                    }
+                    axios.get("/charge",data)
+                        .then(res => {
+                            if(res.data.correct) {
+                                console.log(res.data);
+                                let tmp = this.state.stone;
+                                tmp += 167;
+                                this.setState({
+                                    stone: tmp,
+                                })
+                                alert("Thank you for charging! Now you have " + this.state.stone
+                                    + " holystones for picking");
+                            } else {
+                                alert("something error happened while charging, please try again");
+                            }
+                        })
+                    return false;
+                } else {
+                    alert("Sorry, You can't pick cards because of the lack of holystone");
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        }
+        if(method === "pickTen") {
+            if(num - 30 < 0) {
+                const answer = window.confirm("You don't have enough holystone for picking, " +
+                    "Do you want to spend ￥9800 charging 167 holystones?");
+                if(answer) {
+                    alert("processing...");
+                    const data = {
+                        params: {
+                            method: "charge",
+                            fromClient: true,
+                            money: 9800,
+                            moneyType: "JPY",
+                            holystone: 167,
+                        }
+                    }
+                    axios.get("/charge",data)
+                        .then(res => {
+                            if(res.data.correct) {
+                                console.log(res.data);
+                                let tmp = this.state.stone;
+                                tmp += 167;
+                                this.setState({
+                                    stone: tmp,
+                                })
+                                alert("Thank you for charging! Now you have " + this.state.stone
+                                    + " holystones for picking");
+                            } else {
+                                alert("something error happened while charging, please try again");
+                            }
+                        })
+                    return false;
+                } else {
+                    alert("Sorry, You can't pick cards because of the lack of holystone");
+                    return false;
+                }
+            } else {
+                return true;
+            }
+        }
+    }
+
     handlePickOne = () => {
+        if(this.state.stoneUse) {
+            const haveStone = this.checkStone(this.state.stone,"pickOne");
+            if(!haveStone) return ;
+        }
+
         const data = {
             params:{
                 method:"pickOne",
@@ -135,7 +180,14 @@ class App extends React.Component {
                        style: rare,
                        data: res.data
                    }
-                })
+                });
+                if(this.state.stoneUse) {
+                    let tmp = this.state.stone;
+                    tmp -= 3;
+                    this.setState({
+                        stone: tmp
+                    })
+                }
             })
             .catch(err => {
                 console.error(err);
@@ -143,6 +195,11 @@ class App extends React.Component {
     }
 
     handlePickTen = () => {
+        if(this.state.stoneUse) {
+            const haveStone = this.checkStone(this.state.stone,"pickTen");
+            if(!haveStone) return ;
+        }
+
         const data = {
             params:{
                 method:"pickTen",
@@ -158,11 +215,17 @@ class App extends React.Component {
                         data: res.data
                     }
                 })
+                if(this.state.stoneUse) {
+                    let tmp = this.state.stone;
+                    tmp -= 30;
+                    this.setState({
+                        stone: tmp
+                    })
+                }
             })
             .catch(err => {
                 console.error(err);
             })
-
     }
 
     render() {

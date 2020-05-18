@@ -6,6 +6,8 @@ module.exports = {
     mode: "development",
     entry: {
         react: "./src/scripts/index.jsx",
+        checkRare: "./src/scripts/checkRare.js",
+        checkLength: "./src/scripts/checkLength.js"
     },
     devtool: "source-map",
     module: {
@@ -44,6 +46,7 @@ module.exports = {
     externals: {
         "react": "React",
         "react-dom": "ReactDOM",
-        "lodash": "_"
+        "lodash": "_",
+        "axios": "axios"
     }
 };

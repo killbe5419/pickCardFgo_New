@@ -13,6 +13,14 @@ app.get("/",(req,res) => {
     res.sendFile(staticPath + "index.html");
 })
 
+app.get("/charge",(req,res) => {
+    console.log(req.query);
+    res.send({
+        content:req.query,
+        correct: true,
+    })
+})
+
 app.get("/pickOne",(req,res) => {
     MongoClient.connect(mongoUrl, { useNewUrlParser: true } ,(err,db) => {
         if(err) throw err;
