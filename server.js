@@ -78,7 +78,7 @@ app.get("/calculate",(req,res) => {
             p: p,
         })
     };
-    doAll();
+    doAll().catch(err => console.log(err));
 });
 
 app.listen(2333,() => {
