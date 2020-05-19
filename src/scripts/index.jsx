@@ -6,17 +6,26 @@ import checkRare from "./checkRare.js";
 import checkLength from "./checkLength.js";
 
 
+class PickOne extends React.Component {
+    render() {
+        return (
+            <div className="case" style={ this.props.input.style }>
+                <p> { checkLength(this.props.input.data.name) } </p>
+                <img src={ this.props.input.data.img } alt={ this.props.input.alt } />
+            </div>
+        );
+    }
+}
+
 class Case extends React.Component {
     render() {
 
         if(this.props.method === "pickOne") {
             return (
-                <div className="case" style={ this.props.input.style }>
-                    <p> { checkLength(this.props.input.data.name) } </p>
-                    <img src={ this.props.input.data.img } alt={ this.props.input.alt } />
-                </div>
+               <PickOne input={ this.props.input }/>
             );
         }
+
         if(this.props.method === "pickTen") {
 
             const list = this.props.input.data.map(item =>
