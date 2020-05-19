@@ -590,37 +590,66 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+class PickOne_Case extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+  render() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "case",
+      style: this.props.input.style
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, " ", Object(_checkLength_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this.props.input.data.name), " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: this.props.input.data.img,
+      alt: this.props.input.alt
+    }));
+  }
+
+}
+
+class PickTen_Case extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+  render() {
+    const list = this.props.input.data.map(item => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "case",
+      key: item.No.toString(),
+      style: Object(_checkRare_js__WEBPACK_IMPORTED_MODULE_4__["default"])(item.rare)
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, Object(_checkLength_js__WEBPACK_IMPORTED_MODULE_5__["default"])(item.name)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: item.img,
+      alt: item.name
+    })));
+    list.splice(5, 0, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
+      key: "br"
+    }));
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "pickTenCase"
+    }, list);
+  }
+
+}
+
+class Calculate_Case extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
+  render() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "calcResult"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, " Nobel: ", this.props.input.nobel), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Numbers of picks: ", this.props.input.data.pickNum), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Money: ", this.props.input.data.moneyType, " ", this.props.input.data.money), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Percentage: ", (this.props.input.data.p * 100).toFixed(3), "% "));
+  }
+
+}
+
 class Case extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
   render() {
     if (this.props.method === "pickOne") {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "case",
-        style: this.props.input.style
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, " ", Object(_checkLength_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this.props.input.data.name), " "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        src: this.props.input.data.img,
-        alt: this.props.input.alt
-      }));
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PickOne_Case, {
+        input: this.props.input
+      });
     }
 
     if (this.props.method === "pickTen") {
-      const list = this.props.input.data.map(item => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "case",
-        key: item.No.toString(),
-        style: Object(_checkRare_js__WEBPACK_IMPORTED_MODULE_4__["default"])(item.rare)
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, Object(_checkLength_js__WEBPACK_IMPORTED_MODULE_5__["default"])(item.name)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        src: item.img,
-        alt: item.name
-      })));
-      list.splice(5, 0, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
-        key: "br"
-      }));
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, list);
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(PickTen_Case, {
+        input: this.props.input
+      });
     }
 
     if (this.props.method === "calculate") {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "calcResult"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, " Nobel: ", this.props.input.nobel), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Numbers of picks: ", this.props.input.data.pickNum), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Money: ", this.props.input.data.moneyType, " ", this.props.input.data.money), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Percentage: ", (this.props.input.data.p * 100).toFixed(3), "% "));
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Calculate_Case, {
+        input: this.props.input
+      });
     }
   }
 

@@ -6,7 +6,7 @@ import checkRare from "./checkRare.js";
 import checkLength from "./checkLength.js";
 
 
-class PickOne extends React.Component {
+class PickOne_Case extends React.Component {
     render() {
         return (
             <div className="case" style={ this.props.input.style }>
@@ -17,40 +17,56 @@ class PickOne extends React.Component {
     }
 }
 
+class PickTen_Case extends React.Component {
+    render() {
+        const list = this.props.input.data.map(item =>
+            <div className="case" key={item.No.toString()} style={checkRare(item.rare)}>
+                <p>{ checkLength(item.name) }</p>
+                <img src={ item.img } alt={ item.name } />
+            </div>
+        );
+
+        list.splice(5,0,<br key="br"/>);
+
+        return (
+            <div className="pickTenCase">
+                { list }
+            </div>
+        );
+    }
+}
+
+class Calculate_Case extends React.Component {
+    render() {
+        return (
+            <div className="calcResult">
+                <p> Nobel: { this.props.input.nobel }</p>
+                <p>Numbers of picks: { this.props.input.data.pickNum }</p>
+                <p>Money: { this.props.input.data.moneyType } { this.props.input.data.money }</p>
+                <p>Percentage: { (this.props.input.data.p * 100).toFixed(3) }% </p>
+            </div>
+        );
+    }
+}
+
 class Case extends React.Component {
     render() {
 
         if(this.props.method === "pickOne") {
             return (
-               <PickOne input={ this.props.input }/>
+               <PickOne_Case input={ this.props.input }/>
             );
         }
 
         if(this.props.method === "pickTen") {
 
-            const list = this.props.input.data.map(item =>
-                <div className="case" key={item.No.toString()} style={checkRare(item.rare)}>
-                    <p>{ checkLength(item.name) }</p>
-                    <img src={ item.img } alt={ item.name } />
-                </div>
-            );
-
-            list.splice(5,0,<br key="br"/>)
-
             return (
-                <div>
-                    { list }
-                </div>
+                <PickTen_Case input={ this.props.input } />
             );
         }
         if(this.props.method === "calculate") {
             return (
-                <div className="calcResult">
-                    <p> Nobel: { this.props.input.nobel }</p>
-                    <p>Numbers of picks: { this.props.input.data.pickNum }</p>
-                    <p>Money: { this.props.input.data.moneyType } { this.props.input.data.money }</p>
-                    <p>Percentage: { (this.props.input.data.p * 100).toFixed(3) }% </p>
-                </div>
+                <Calculate_Case input={ this.props.input } />
             );
         }
 
