@@ -271,7 +271,7 @@ class App extends React.Component {
     render() {
         return (
             <div>
-                <h1 className="title">FGO pick-card simulation</h1>
+                <h1 className="title">FGO Pick-card Simulator</h1>
                 <button onClick={ this.handlePickOne }>Pick 1 card</button>
                 <button onClick={ this.handlePickTen }>Pick 10 cards</button>
                 <button onClick={ this.handleCalc }>Calculate</button>
