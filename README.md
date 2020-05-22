@@ -2,7 +2,7 @@
 
 ## 中文说明：
 
-pickCardFgo是一个由JavaScript写成的fgo模拟抽卡系统。下面简单介绍一下其原理和构成。
+pickCardFgo是将手机游戏Fate/GrandOrder的抽卡系统抽出，并使用Javascript制作而成的WepApp。下面简单介绍一下其原理和构成。
 
 #### 原理:
 
@@ -10,11 +10,11 @@ pickCardFgo是一个由JavaScript写成的fgo模拟抽卡系统。下面简单�
 
 #### 构成：
 
-- `Pick 1 card` 按钮：为从卡池中抽取一个角色或是概念礼装。
+- `Pick 1 card` 按钮：为从卡池中抽取1张卡。
 
-- `Pick 10 cards` 按钮：为从卡池中抽取一个10连，并应用一些保底机制。
+- `Pick 10 cards` 按钮：为从卡池中进行一个10连抽卡，并应用一些保底机制。
 
-- `Calculate` 按钮：是一个独立功能，用于计算抽取当前池子中的概率提升卡所需圣晶石的期望。
+- `Calculate` 按钮：是一个独立功能，用于计算抽取特定数量当前卡池中的pick-up卡的概率和达成时消耗的资源（游戏内消费品，现实货币，抽数等）。
 
 - ##### 内容说明：
 
@@ -54,7 +54,7 @@ pickCardFgo是一个由JavaScript写成的fgo模拟抽卡系统。下面简单�
 
 ## 日本語ドキュメント：
 
-pickCardFgoはスマホゲームのFate/GrandOrderのガチャシステムを抽出して、独立のにしたシステムです。このWebアプリの機能と原理を簡単に説明します。
+pickCardFgoはスマホゲームのFate/GrandOrderのガチャシステムを抽出して、Javascriptを使用して構築したWebアプリです。これより機能と原理を簡単に説明します。
 
 #### 原理:
 
@@ -66,7 +66,7 @@ pickCardFgoはスマホゲームのFate/GrandOrderのガチャシステムを抽
 
 - `Pick 10 cards` ボタン：当期のカードプールからカード10枚をガチャします。同時に保証ルールが適用されます。
 
-- `Calculate` ボタン：独立な機能である。当期カードプールからピックアップされたカードの排出率とそのため消耗した資源（ゲーム内通貨、金、ガチャ回数など）を算出します。
+- `Calculate` ボタン：独立な機能である。当期カードプールからピックアップされたカードの排出率とそのため消耗した資源（ゲーム内通貨、現実通貨、ガチャ回数など）を算出します。
 
 - ##### コンテンツの说明：
 
@@ -87,11 +87,11 @@ pickCardFgoはスマホゲームのFate/GrandOrderのガチャシステムを抽
 
 `node run server`
 
-でサーバを立って、[ロンカルホスト](http://localhost:2333)で実行例を見ることができます。面倒だと考える方もいると思うので，このアプリを同時に[僕のサイト](http://pickcard.net-labo.icu:2333)に実装しましたので,もし興味があるなら、サイトにアクセスして、いろいろやってみてください！パブリッククラウドを使っていますので、実際やっている時はスムーズに動けない時もあります。それに対してすみませんと思いますが、根性を持って待つことをお願いします。気に入ってくれると嬉しいです！
+でサーバを立って、[localhost](http://localhost:2333)で実行例を見ることができます。面倒だと考える方もいると思うので，このアプリを同時に[My site](http://pickcard.net-labo.icu:2333)に実装しましたので,もし興味があるなら、サイトにアクセスして、いろいろやってみてください！パブリッククラウドを使っていますので、実際やっている時はスムーズに動けない時もあります。それに対してすみませんと思いますが、根性を持って待つことをお願いします。気に入ってくれると嬉しいです！
 
 
 ## English Description:
-pickCardFgo is a system of fgo pick-card simulation. I'll introduce principle and structure about it.
+pickCardFgo is an Extraction of smartphone game Fate/GrandOrder and made by Javascript. I'll simply introduce principle and structure about it.
 
 #### principle:
 this system uses client-server mode. frontend used `React`, backend used by `Node.js`, and DB is `Mongodb`. Frontend sends pick-card request to server, and server searches a character info in DataBase. then server returns the character info back to client as respond. Finally, frontend processes the responded data and shows it to user.
