@@ -1,0 +1,59 @@
+.title {
+    color: white;
+}
+
+body {
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-color: black;
+}
+
+h1 {
+    color: azure;
+    font-size: 40px;
+    font-weight: 900;
+}
+
+#react-dom button {
+    display: inline-block;
+    padding: .3em .8em;
+    border: 1px solid #446d88;
+    background: #58a linear-gradient(#77a0bb,#58a);
+    border-radius: .2em;
+    box-shadow: 0 .05em .25em gray;
+    color: white;
+    text-shadow: 0 -.05em .05em #335166;
+    font-size: 125%;
+    line-height: 1.5;
+    margin-right: .5em;
+}
+
+#showStone {
+    display: inline-block;
+}
+
+#showStone * {
+    display: inline-block;
+}
+
+#showStone p {
+    font-size: 15px;
+    font-weight: 900;
+    color: azure;
+}
+
+.case {
+    display: inline-block;
+    margin: 10px;
+}
+
+.case p {
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.calcResult {
+    font-size: 15px;
+    font-weight: 900;
+    color: azure;
+}
