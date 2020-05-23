@@ -1,12 +1,30 @@
-# pickCardFgo v2.0 (under making)
+# pickCardFgo v2.0 (On Editing)
 
 ## 中文说明：
 
-pickCardFgo是将手机游戏Fate/GrandOrder的抽卡系统抽出，并使用Javascript制作而成的WepApp。下面简单介绍一下其原理和构成。
+pickCardFgo是将手机游戏Fate/GrandOrder的抽卡项目抽出，并使用Javascript制作而成的WepApp。下面简单介绍一下其原理和构成。
 
 #### 原理:
 
-该系统採用client-server模式。前端为`React`，后端为`Node.js`，数据库为`Mongodb`。前端将抽卡要求发送到后端node服务器。node服务器查询数据库寻找角色的信息并传回前端，展示给浏览者。
+该项目採用client-server模式。前端为[React](https://reactjs.org)，后端为[Node.js](https://nodejs.org)+[Express](https://expressjs.com)，数据库为[Mongodb](https://mongodb.com)。关于前端部分，React的部分由.jsx格式编写，并通过[Webpack](https://webpack.js.org )并使用[babel](https://babeljs.io )的[babel-loader](https://github.com/babel/babel-loader )进行转译，将`.jsx`还原为旧版本的等效代码。并且使用[axios](https://github.com/axios/axios )完成Ajax请求，实现了单页面无刷新式交互。后端的Nodejs使用Express框架，并推送了IP地址的根目录为静态目录，在此基础上又静态地推送了主页的index.html，从而避免了跨域问题。数据库中事先导入了fgo相关卡的信息并储存在fgo的名为cards的collection中方便调取使用。该项目的实例采用[AlibabaCloud](https://www.alibabacloud.com)进行DNS解析，使用的[AWS EC2](https://aws.amazon.com/ec2 )进行环境构筑，并使用npm环境的pm2监视和确保服务器稳定运行。
+
+**准备步骤：**
+
+1. 获取域名：http://pickcard.net-labo.icu，并使用AliCloud将其解析到AWS的地址。
+
+2. 配置AWS EC2环境，安装npm环境和所需依赖包，安装mongodb并使用`mongorestore`将数据还原到数据库。
+
+3. 启动服务器，将index.html推送到域名的根"/"。
+
+4. 使用Web浏览器访问域名，浏览器渲染主页。至此准备步骤完成。
+
+**运作方式：**
+
+1. 当用户在网页端进行交互时，触发onclick事件，该事件对应一个函数，会向服务器发出一个Ajax形式的GET请求（Request）。
+
+2. 服务器端接收GET请求，读取内容，并根据需求查找DB中的数据，并通过回复（Response）的形式返回给网页端。
+
+3. 网页端接收到回复，读取其内容，并通过网页端UI展示给使用者。
 
 #### 构成：
 
@@ -22,7 +40,7 @@ pickCardFgo是将手机游戏Fate/GrandOrder的抽卡系统抽出，并使用Jav
 
 2. 当标准模式（圣晶石图标上面没有叉）时，抽卡会和游戏中一样消耗圣晶石。具体为：抽1次消耗3圣晶石，抽10次消耗30圣晶石。
 
-3. 在标准模式下，当圣晶石数量不足时，系统会提示是否购买圣晶石，如果购买则会花费¥9800购买167圣晶石，可以继续抽卡。
+3. 在标准模式下，当圣晶石数量不足时，项目会提示是否购买圣晶石，如果购买则会花费¥9800购买167圣晶石，可以继续抽卡。
 
 4. 在标准模式下，当圣晶石数量不足且未购买圣晶石的情况下，不允许继续抽卡。
 
@@ -35,21 +53,61 @@ pickCardFgo是将手机游戏Fate/GrandOrder的抽卡系统抽出，并使用Jav
 
 3. 这次在写代码时，并没有像旧版本一样在HTML中静态生成文件，而是利用了React的vdom动态地生成html的要素。这是因为要遵守TreeShading原则。对于浏览器来说，存在于RenderTree中的元素，即使是空元素，也会被渲染到网页上。而通过动态生成HTML元素可以有效避免空元素被渲染，从而优化了Web浏览器的渲染效率。这也使得Web浏览器占用更少的电脑资源。
 
-4. 和之前一样，这次的新版本使用了MongoDB这个noSQL数据库来储存卡片的数据。关于为什么不选择MySQL这种SQL类型的RDBMS而选择MongoDB这种DSDB，主要是因为SQL对于数据的架构要求过于严格，所有数据必选强制满足所有所需架构才能进表。而对于游戏数据来说，很多数据并没有这样的规则。所以在游戏相关数据中使用SQL会显得十分不自由。而且noSQL（not only SQL）除了表形式的二次元数据之外，也可以储存JSON这种立体形式的数据，自由度相对RDBMS系统高。而RDBMS系统适用于数据需要频繁变化的，数据之间的关联需要被严格遵守的动态数据。这里的由于是静态多元数据，所以使用了noSQL。
+4. 和之前一样，这次的新版本使用了MongoDB这个noSQL数据库来储存卡片的数据。关于为什么不选择MySQL这种SQL类型的RDBMS而选择MongoDB这种DSDB，主要是因为SQL对于数据的架构要求过于严格，所有数据必选强制满足所有所需架构才能进表。而对于游戏数据来说，很多数据并没有这样的规则。所以在游戏相关数据中使用SQL会显得十分不自由。而且noSQL（not only SQL）除了表形式的二次元数据之外，也可以储存JSON这种立体形式的数据，自由度相对RDBMS项目高。而RDBMS项目适用于数据需要频繁变化的，数据之间的关联需要被严格遵守的动态数据。这里的由于是静态多元数据，所以使用了noSQL。
 
 
 
 
 #### 使用
-该系统运行在node环境下，而且需要mongodb，express，cors等依赖包。如果你的电脑上已经配置了node环境并且安装了git，你可以直接使用
+
+##### 1. 下载和环境配置
+该项目运行在node环境下，如果你的电脑没有安装node，请前往[Node.js官网](https://nodejs.org)安装对应版本的Node.js。
+请一并[安装Git](https://git-scm.com/downloads )以便于下载本项目.
+
+如果你的电脑上已经配置了Node.js环境并且安装了Git，你可以直接使用
 
 `git clone https://github.com/killbe5419/pickCardFgo_New.git` 
 
-来下载本系统并使用
+来下载本项目并使用
 
-`node run server`
+`cd pickCardFgo_New`
 
-来在[本地服务器](http://localhost:2333)运行它。如果你嫌麻烦，没关系！我把样例发布在了[我的网站](http://pickcard.net-labo.icu:2333), 如果有兴趣你可以去看一看。但是样例的服务器性能不好,因此运行起来可能会比较慢。我对此表示歉意但请也请你耐心等待加载过程。希望你能喜欢！
+转到项目文件夹并使用
+
+`npm install`
+
+来自动安装该项目的依赖包。
+
+##### 2. 数据库导入
+如果你的电脑上没有安装MongoDB，请前往[MongoDB官网](https://docs.mongodb.com/manual/installation/ )安装对应版本的MongoDB，并按照官网说明启动`mongod`。
+请自行安装解压缩工具用来解压缩DB的数据备份。
+
+如果你的电脑上已经已经安装MongoDB并启动了`mongod`，使用
+
+`cd pickCardFgo_New`
+
+转到该文件夹并使用解压缩工具解压缩fgo.zip。在解压缩完成后使用
+
+`mongorestore -d fgo -h localhost:27017 fgo`
+
+将数据备份还原到数据库中。
+
+##### 3. 启动服务器
+如果你已经完成了前2步中的所有操作，使用
+
+`cd pickCardFgo_New`
+
+转到该文件夹并使用
+
+`npm run server`
+
+来启动服务器。之后使用你的Web浏览器访问
+
+[http://localhost:2333](http://localhost:2333) 
+
+即可在本地服务器运行它。
+
+如果你嫌麻烦，没关系！我把样例发布在了[我的网站](http://pickcard.net-labo.icu:2333), 如果有兴趣你可以去看一看。但是样例的服务器性能不好,因此运行起来可能会比较慢。我对此表示歉意并请也请耐心等待加载过程。希望你能喜欢！
 
 
 ## 日本語ドキュメント：
@@ -124,3 +182,5 @@ and use it by coding:
 `node run server`
 
 to run it in [localhost](http://localhost:2333). If you feel sticky, that's ok! I have already published it on [my site](http://pickcard.net-labo.icu:2333). If you're interested in it, go there and try it! In addition, because of the poor performance of that cloud server, the exp may be a little slow, I feel sorry about that but please be patient. I hope you could enjoy it!
+
+[]: https://babeljs.io
