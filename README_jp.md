@@ -4,11 +4,11 @@
 
 [English Document ( On Editing )](https://github.com/killbe5419/pickCardFgo_New/blob/master/README_en.md)
 
-pickCardFgoはスマホゲームのFate/GrandOrderのガチャ項目を抽出して、Javascriptを使用して構築したWebアプリです。これより機能と原理を簡単に説明します。
+pickCardFgoはスマホゲームのFate/GrandOrderのガチャシステムを抽出して、Javascriptを使用して構築したWebアプリです。これより機能と原理を簡単に説明します。
 
 #### 原理:
 
-この項目はclient-serverモデルに従い作成されました。フロントエンドは[React](https://reactjs.org)、バックエンドは[Node.js](https://nodejs.org)+[Express](https://expressjs.com)、データベースは[Mongodb](https://mongodb.com)。フロントエンドにおいて、Reactの部分は.jsxのフォーマットで作成し、[Webpack](https://webpack.js.org )と[babel](https://babeljs.io )の[babel-loader](https://github.com/babel/babel-loader )によりトランスパイルを実装しました。Webpackは`.jsx`を古いバージョンのJSに変更する機能を果たしています。また、[axios](https://github.com/axios/axios )を使用し、Ajaxのリクエストを出すため、ノーリフレッシュのシングルページで全てのデータのやりとりを実現できました。バックエンドのNodejsはExpressフレームワークを使用し、"/"のstaticPathをserveしました。また、それに基づき、静的にindex.htmlをserveすることによって、CORSの問題を回避しました。データベースのMongoDBは事先にfgoカードの情報がインポートされ、fgoというDBのcardsというcollection中保存されました。このプロジェクトの実行例は"pickcard.net-labo.icu"というドメイン名を使用し、[AlibabaCloud](https://www.alibabacloud.com)を通じてDNS名前解決を対応しています。それに加えて[AWS EC2](https://aws.amazon.com/ec2 )を使用してインフラ構築を行い、npm環境のpm2でサービスの安定性を確保しています。
+このプロジェクトはclient-serverモデルに従い作成されました。フロントエンドは[React](https://reactjs.org)、バックエンドは[Node.js](https://nodejs.org)+[Express](https://expressjs.com)、データベースは[Mongodb](https://mongodb.com)。フロントエンドにおいて、Reactの部分は.jsxのフォーマットで作成し、[Webpack](https://webpack.js.org )と[babel](https://babeljs.io )の[babel-loader](https://github.com/babel/babel-loader )によりトランスパイルを実装しました。Webpackは`.jsx`を古いバージョンのJSに変更する機能を果たしています。また、[axios](https://github.com/axios/axios )を使用し、Ajaxのリクエストを出すため、ノーリフレッシュのシングルページで全てのデータのやりとりを実現できました。バックエンドのNodejsはExpressフレームワークを使用し、"/"のstaticPathをserveしました。また、それに基づき、静的にindex.htmlをserveすることによって、CORSの問題を回避しました。データベースのMongoDBは事先にfgoカードの情報がインポートされ、fgoというDBのcardsというcollection中保存されました。このプロジェクトの実行例は"pickcard.net-labo.icu"というドメイン名を使用し、[AlibabaCloud](https://www.alibabacloud.com)を通じてDNS名前解決を対応しています。それに加えて[AWS EC2](https://aws.amazon.com/ec2 )を使用してインフラ構築を行い、npm環境のpm2でサービスの安定性を確保しています。
 
 **準備として：**
 
@@ -42,7 +42,7 @@ pickCardFgoはスマホゲームのFate/GrandOrderのガチャ項目を抽出し
 
 2. 標準モード（聖晶石のアイコンでバツが表示されない）において，ガチャはゲームのように聖晶石を使用します。具体的に：1回ガチャにつき、聖晶石3個使用します，10連ガチャにつき、聖晶石3個使用します。
 
-3. 標準モードにおいて，聖晶石の数がガチャの必須個数より低い場合，項目は「聖晶石を購入しますか」というメッセージを提示します。購入を許可する場合は167がチャージされ，ガチャを続行することができます。
+3. 標準モードにおいて，聖晶石の数がガチャの必須個数より低い場合，システムは「聖晶石を購入しますか」というメッセージを提示します。購入を許可する場合は167がチャージされ，ガチャを続行することができます。
 
 4. 標準モードにおいて，聖晶石の数がガチャの必須個数より低いかつ聖晶石の購入を確認できない場合，ガチャを続行することができません。
 
