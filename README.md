@@ -15,7 +15,7 @@ pickCardFgo是将手机游戏Fate/GrandOrder的抽卡项目抽出，并使用Jav
 
 **准备步骤：**
 
-1. 获取域名：http://pickcard.net-labo.icu，并使用AliCloud将其解析到AWS的地址。
+1. 获取域名：[pickcard.net-labo.icu](http://pickcard.net-labo.icu)，并使用AliCloud将其解析到AWS的地址。
 
 2. 配置AWS EC2环境，安装npm环境和所需依赖包，安装mongodb并使用`mongorestore`将数据还原到数据库。
 

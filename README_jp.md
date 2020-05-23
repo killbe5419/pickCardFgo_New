@@ -8,7 +8,7 @@ pickCardFgoはスマホゲームのFate/GrandOrderのガチャ項目を抽出し
 
 **準備として：**
 
-1. ドメイン名：http://pickcard.net-labo.icu　を入手し、AliCloudを利用してそれをAWS EC2のサーバに対応します。
+1. ドメイン名：[pickcard.net-labo.icu](http://pickcard.net-labo.icu) を入手し、AliCloudを利用してそれをAWS EC2のサーバに対応します。
 
 2. AWS EC2の環境構築を行い、npmとそのdependenceをインストールします。次にMongoDBをインストールしてデータを復元します。
 
