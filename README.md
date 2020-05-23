@@ -1,7 +1,9 @@
-# pickCardFgo v2.0 (On Editing)
+# pickCardFgo v2.0
 
-[日本語ドキュメント]()
-[English Document]()
+[日本語ドキュメント](https://github.com/killbe5419/pickCardFgo_New/blob/master/README_jp.md)
+
+[English Document ( On Editing )](https://github.com/killbe5419/pickCardFgo_New/blob/master/README_en.md)
+
 
 ## 中文说明：
 
