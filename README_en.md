@@ -1,4 +1,10 @@
-## English Description(On Editing):
+## English Document ( On Editing ):
+
+[中文说明](https://github.com/killbe5419/pickCardFgo_New/blob/master/README.md )
+
+[日本語ドキュメント](https://github.com/killbe5419/pickCardFgo_New/blob/master/README_jp.md)
+
+
 pickCardFgo is an Extraction of smartphone game Fate/GrandOrder and made by Javascript. I'll simply introduce principle and structure about it.
 
 #### principle:

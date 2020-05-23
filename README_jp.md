@@ -1,5 +1,9 @@
 ## 日本語ドキュメント：
 
+[中文说明](https://github.com/killbe5419/pickCardFgo_New/blob/master/README.md )
+
+[English Document ( On Editing )](https://github.com/killbe5419/pickCardFgo_New/blob/master/README_en.md)
+
 pickCardFgoはスマホゲームのFate/GrandOrderのガチャ項目を抽出して、Javascriptを使用して構築したWebアプリです。これより機能と原理を簡単に説明します。
 
 #### 原理:
