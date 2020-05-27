@@ -607,7 +607,7 @@ class PickTen_Case extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Componen
   render() {
     const list = this.props.input.data.map(item => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "case",
-      key: item.No.toString(),
+      key: item.id,
       style: Object(_checkRare_js__WEBPACK_IMPORTED_MODULE_4__["default"])(item.rare)
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, Object(_checkLength_js__WEBPACK_IMPORTED_MODULE_5__["default"])(item.name)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       src: item.img,
@@ -627,7 +627,7 @@ class Calculate_Case extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Compon
   render() {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "calcResult"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, " Nobel: ", this.props.input.nobel), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Numbers of picks: ", this.props.input.data.pickNum), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Money: ", this.props.input.data.moneyType, " ", this.props.input.data.money), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Percentage: ", (this.props.input.data.p * 100).toFixed(3), "% "));
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, " Nobel: ", this.props.input.nobel), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, " Numbers of picks: ", this.props.input.data.pickNum), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, " Money: ", this.props.input.data.moneyType, " ", this.props.input.data.money), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, " Percentage: ", (this.props.input.data.p * 100).toFixed(3), "% "));
   }
 
 }
@@ -650,6 +650,8 @@ class Case extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Calculate_Case, {
         input: this.props.input
       });
+    } else {
+      return null;
     }
   }
 
@@ -865,7 +867,7 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
           display: "none"
         },
         alt: "waiting for image",
-        method: "pickOne",
+        method: "",
         data: {
           name: "",
           img: ""

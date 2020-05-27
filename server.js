@@ -22,63 +22,24 @@ app.get("/charge",(req,res) => {
 })
 
 app.get("/pickOne",(req,res) => {
-    const doAll = async () => {
-        const pick = await pickOne();
-        await res.send(pick);
-    }
-    doAll().catch(err => console.log(err));
+    pickOne()
+        .then(doc => {
+            res.send(doc);
+        })
 })
 
 app.get("/pickTen",(req,res) => {
-    const doAll = async () => {
-        let pick = [];
-        pick.push(await pickGuarantee3servant());
-        pick.push(await pickGuarantee4());
-        for(let i=2;i<10;i++) {
-            pick.push(await pickOne());
-        }
-        for(let i=0;i<pick.length;i++) {
-            pick[i].No = i;
-        }
-        await res.send(pick);
-    }
-    doAll().catch(err => console.log(err));
+    pickTen()
+        .then(doc => {
+            res.send(doc);
+        })
 })
 
 app.get("/calculate",(req,res) => {
-    const doAll = async () => {
-        const nobel = req.query.nobel;
-        let nobelNow = 0, pickNum = 0, stone = 0;
-        let pick = [];
-        while (nobelNow < nobel) {
-            pick.push(await pickGuarantee3servant());
-            pick.push(await pickGuarantee4());
-            for(let i=2;i<10;i++) {
-                pick.push(await pickOne());
-            }
-            for(let i=0;i<pick.length;i++) {
-                if(pick[i].type === "servant" && pick[i].rare > 3) {
-                    console.log(pick[i].name);
-                }
-                if(pick[i].name === "ジャンヌ・オルタ" && pick[i].isPickedUp === true) nobelNow += 1;
-            }
-            pickNum += 1;
-            stone += 30;
-            pick = [];
-        }
-        const money = Math.ceil(stone / 167) * 9800;
-        const p = nobelNow / (pickNum * 10);
-        await console.log(nobelNow,pickNum,stone,money);
-        await res.send({
-            nobel: nobelNow,
-            pickNum: pickNum,
-            stone:stone,
-            money: money,
-            moneyType: "JPY(￥)",
-            p: p,
+    calculate(req.query.nobel)
+        .then(doc => {
+            res.send(doc);
         })
-    };
-    doAll().catch(err => console.log(err));
 });
 
 app.listen(2333,() => {
@@ -143,26 +104,24 @@ function percentage() {
 }
 
 function pickOne () {
-    return new Promise(resolve => {
-        MongoClient.connect(mongoUrl, { useNewUrlParser: true } ,(err,db) => {
-            if(err) throw err;
-            const targetDB = db.db("fgo");
+    return new Promise((resolve,reject) => {
+        MongoClient.connect(mongoUrl,(err,client) => {
+            if(err) reject(err);
+            const targetDB = client.db("fgo");
             const item = percentage();
             targetDB.collection("card").find(item).toArray((err,result) => {
-                if(err) throw err;
+                if(err) reject(err);
                 const tmp = Math.floor(Math.random() * result.length);
                 resolve(result[tmp]);
             })
-            db.close().then(()=> {
-                console.log("connection ended!");
-            }).catch();
+            client.close().catch();
         })
     })
 }
 
 function pickGuarantee3servant () {
     return new Promise(resolve => {
-        MongoClient.connect(mongoUrl, { useNewUrlParser: true } ,(err,db) => {
+        MongoClient.connect(mongoUrl,(err,db) => {
             if(err) throw err;
             const targetDB = db.db("fgo");
             const item = {
@@ -175,16 +134,14 @@ function pickGuarantee3servant () {
                 const tmp = Math.floor(Math.random() * result.length);
                 resolve(result[tmp]);
             })
-            db.close().then(()=> {
-                console.log("connection ended!");
-            }).catch();
+            db.close().catch();
         })
     })
 }
 
 function pickGuarantee4 () {
     return new Promise(resolve => {
-        MongoClient.connect(mongoUrl, { useNewUrlParser: true } ,(err,db) => {
+        MongoClient.connect(mongoUrl, (err,db) => {
             if(err) throw err;
             const targetDB = db.db("fgo");
             const item = {
@@ -196,9 +153,47 @@ function pickGuarantee4 () {
                 const tmp = Math.floor(Math.random() * result.length);
                 resolve(result[tmp]);
             })
-            db.close().then(()=> {
-                console.log("connection ended!");
-            }).catch();
+            db.close().catch();
         })
     })
+}
+
+async function pickTen () {
+    let outArray = [];
+    outArray.push(await pickGuarantee3servant());
+    outArray.push(await pickGuarantee4());
+
+    for (let i = 0; i < 8; i++) {
+        outArray.push(await pickOne());
+    }
+
+    for (let i = 0; i < outArray.length; i++) {
+        outArray[i].id = i;
+    }
+
+    return outArray;
+}
+
+async function calculate(nobel) {
+    let nobelNow = 0, pickNum = 0, stone = 0;
+    while(nobelNow < nobel) {
+        const pick = await pickTen();
+        for (let i = 0; i < pick.length; i++) {
+            if(pick[i].rare === 5 && pick[i].isPickedUp) {
+                nobelNow ++;
+            }
+        }
+        pickNum += 10;
+        stone += 30;
+    }
+    const money = Math.ceil(stone / 167) * 9800;
+    const p = nobelNow / (pickNum * 10);
+    return({
+        nobel: nobelNow,
+        pickNum: pickNum,
+        stone:stone,
+        money: money,
+        moneyType: "JPY(￥)",
+        p: p,
+    });
 }

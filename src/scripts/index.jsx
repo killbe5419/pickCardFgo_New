@@ -20,7 +20,7 @@ class PickOne_Case extends React.Component {
 class PickTen_Case extends React.Component {
     render() {
         const list = this.props.input.data.map(item =>
-            <div className="case" key={item.No.toString()} style={checkRare(item.rare)}>
+            <div className="case" key={item.id} style={checkRare(item.rare)}>
                 <p>{ checkLength(item.name) }</p>
                 <img src={ item.img } alt={ item.name } />
             </div>
@@ -41,9 +41,9 @@ class Calculate_Case extends React.Component {
         return (
             <div className="calcResult">
                 <p> Nobel: { this.props.input.nobel }</p>
-                <p>Numbers of picks: { this.props.input.data.pickNum }</p>
-                <p>Money: { this.props.input.data.moneyType } { this.props.input.data.money }</p>
-                <p>Percentage: { (this.props.input.data.p * 100).toFixed(3) }% </p>
+                <p> Numbers of picks: { this.props.input.data.pickNum }</p>
+                <p> Money: { this.props.input.data.moneyType } { this.props.input.data.money }</p>
+                <p> Percentage: { (this.props.input.data.p * 100).toFixed(3) }% </p>
             </div>
         );
     }
@@ -68,6 +68,8 @@ class Case extends React.Component {
             return (
                 <Calculate_Case input={ this.props.input } />
             );
+        } else {
+            return null;
         }
 
     }
@@ -84,7 +86,7 @@ class App extends React.Component {
             input: {
                 style: {display: "none"},
                 alt: "waiting for image",
-                method:"pickOne",
+                method:"",
                 data:{
                     name: "",
                     img: "",

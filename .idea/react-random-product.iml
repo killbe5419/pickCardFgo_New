@@ -15,5 +15,6 @@
     <orderEntry type="library" name="react-dom" level="application" />
     <orderEntry type="library" name="qs" level="application" />
     <orderEntry type="library" name="@types/express" level="application" />
+    <orderEntry type="library" name="@types/mongodb" level="application" />
   </component>
 </module>
